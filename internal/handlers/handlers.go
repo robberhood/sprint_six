@@ -56,6 +56,7 @@ func HandlerUpload(w http.ResponseWriter, r *http.Request) {
 	_, err = localFile.Write([]byte(convertData))
 	if err != nil {
 		http.Error(w, "cannot write file", http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
