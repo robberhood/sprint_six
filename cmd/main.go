@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -21,7 +20,7 @@ func main() {
 
 	srv.Logger.Println("Server starting..")
 	if err := srv.Server.ListenAndServe(); err != nil {
-		fmt.Printf("ошибка запуска сервера: %s\n", err.Error())
+		srv.Logger.Fatal("ошибка запуска сервера: %s\n", err.Error())
 		return
 	}
 }
