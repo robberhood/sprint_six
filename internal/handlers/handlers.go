@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -10,9 +11,14 @@ import (
 )
 
 func HandlerGetHTML(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	data, err := os.ReadFile("index.html")
 	if err != nil {
-		http.Error(w, "file not found", http.StatusBadRequest)
+		http.Error(w, "file not found", http.StatusInternalServerError)
 		return
 	}
 
@@ -30,7 +36,7 @@ func HandlerUpload(w http.ResponseWriter, r *http.Request) {
 
 	file, _, err := r.FormFile("myFile")
 	if err != nil {
-		http.Error(w, "cannot read file", http.StatusBadRequest)
+		http.Error(w, "cannot read file", http.StatusInternalServerError)
 		return
 	}
 	defer file.Close()
@@ -59,7 +65,10 @@ func HandlerUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(convertData))
+	if _, err := w.Write([]byte(convertData)); err != nil {
+		log.Println("cannot write response:", err)
+	}
 
 }

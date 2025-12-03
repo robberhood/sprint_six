@@ -18,9 +18,9 @@ func main() {
 
 	srv := server.CreateHTTPServer(logger)
 
-	srv.Logger.Println("Server starting..")
+	srv.Logger.Printf("Server starting... port: %s", srv.Server.Addr)
 	if err := srv.Server.ListenAndServe(); err != nil {
-		srv.Logger.Fatal("ошибка запуска сервера: %s\n", err.Error())
+		srv.Logger.Fatalf("ошибка запуска сервера: %s\n", err.Error())
 		return
 	}
 }
